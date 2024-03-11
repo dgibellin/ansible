@@ -1,0 +1,10 @@
+---
+- name: Java-17-openjdk Status
+- hosts: all
+  become: yes
+  tasks:
+    - name: Ensure java-17-openjdk is installed.
+      yum: name=java-17-openjdk state=present
+# The above task ensures openjdk's installation. If it is installed, ansible reports back OK; if it is not installed, ansible will install it via the YUM module
+    - command: yum list installed java-17-openjdk
+# The above command will run that exact command. Unfortunately, this would probably not report back much and dumbly report back "OK".
