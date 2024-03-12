@@ -8,3 +8,7 @@
 # The above task ensures openjdk's installation. If it is installed, ansible reports back OK; if it is not installed, ansible will install it via the YUM module
     - command: yum list installed java-17-openjdk
 # The above command will run that exact command. Unfortunately, this would probably not report back much and dumbly report back "OK".
+  tasks:
+    - name: TTC Storage Check
+    - command: df -h
+# Make this its own playbook with its own giben hosts
