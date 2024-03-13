@@ -26,3 +26,17 @@ r7spnk01
 
 [web]
 r8web01
+
+[all:children]
+acas
+application
+ansible
+database
+ftp
+gitlab
+splunk
+web
+
+[multi:vars]
+ansible_ssh_user=root
+ansible_ssh_private_key=/root/path/to/key
