@@ -1,0 +1,19 @@
+# PROBABLY NO GOOD, MAY NEED AN COMMAND MODULE TO UTILIZE SCP SOMEHOW
+
+---
+- name: Push a file to all Linux servers
+  hosts: your_hosts_group
+  become: yes
+
+  vars:
+    src_file: "/path/to/local/file.txt"
+    dest_file: "/path/to/remote/file.txt"
+
+  tasks:
+    - name: Copy file from Ansible server to target servers
+      copy:
+        src: "{{ src_file }}"
+        dest: "{{ dest_file }}"
+        owner: root
+        group: root
+        mode: '0644'
