@@ -1,19 +1,49 @@
-# PROBABLY NO GOOD, MAY NEED AN COMMAND MODULE TO UTILIZE SCP SOMEHOW
-
 ---
-- name: Push a file to all Linux servers
+- name: Backup configuration files
   hosts: your_hosts_group
   become: yes
 
   vars:
-    src_file: "/path/to/local/file.txt"
-    dest_file: "/path/to/remote/file.txt"
+    backup_dir: "/tmp"
 
   tasks:
-    - name: Copy file from Ansible server to target servers
+    - name: Ensure backup directory exists
+      file:
+        path: "{{ backup_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Backup /etc/krb5.conf
       copy:
-        src: "{{ src_file }}"
-        dest: "{{ dest_file }}"
+        src: "/etc/krb5.conf"
+        dest: "{{ backup_dir }}/krb5.conf.bak"
         owner: root
         group: root
         mode: '0644'
+
+    - name: Backup /etc/hosts
+      copy:
+        src: "/etc/hosts"
+        dest: "{{ backup_dir }}/hosts.bak"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Backup /etc/resolv.conf
+      copy:
+        src: "/etc/resolv.conf"
+        dest: "{{ backup_dir }}/resolv.conf.bak"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Backup /etc/sssd/sssd.conf
+      copy:
+        src: "/etc/sssd/sssd.conf"
+        dest: "{{ backup_dir }}/sssd.conf.bak"
+        owner: root
+        group: root
+        mode: '0644'
+
