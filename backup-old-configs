@@ -17,7 +17,7 @@
 
     - name: Backup /etc/krb5.conf
       copy:
-        src: /etc/krb5.conf
+        src: "/etc/krb5.conf"
         dest: "{{ backup_dir }}/krb5.conf.bak"
         owner: root
         group: root
@@ -25,7 +25,7 @@
 
     - name: Backup /etc/hosts
       copy:
-        src: /etc/hosts
+        src: "/etc/hosts"
         dest: "{{ backup_dir }}/hosts.bak"
         owner: root
         group: root
@@ -33,7 +33,7 @@
 
     - name: Backup /etc/resolv.conf
       copy:
-        src: /etc/resolv.conf
+        src: "/etc/resolv.conf"
         dest: "{{ backup_dir }}/resolv.conf.bak"
         owner: root
         group: root
@@ -41,7 +41,7 @@
 
     - name: Backup /etc/sssd/sssd.conf
       copy:
-        src: /etc/sssd/sssd.conf
+        src: "/etc/sssd/sssd.conf"
         dest: "{{ backup_dir }}/sssd.conf.bak"
         owner: root
         group: root
