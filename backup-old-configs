@@ -3,46 +3,14 @@
   hosts: your_hosts_group
   become: yes
 
-  vars:
-    backup_dir: "/tmp"
-
+- name: Copy file locally on remote nodes
+  hosts: your_hosts_group
+  become: yes
   tasks:
-    - name: Ensure backup directory exists
-      file:
-        path: "{{ backup_dir }}"
-        state: directory
-        owner: root
-        group: root
-        mode: '0755'
+    - name: Copy file locally
+      command: cp /etc/sssd/sssd.conf /tmp/sssd.conf.bak
 
-    - name: Backup /etc/krb5.conf
-      copy:
-        src: "/etc/krb5.conf"
-        dest: "{{ backup_dir }}/krb5.conf.bak"
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Backup /etc/hosts
-      copy:
-        src: "/etc/hosts"
-        dest: "{{ backup_dir }}/hosts.bak"
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Backup /etc/resolv.conf
-      copy:
-        src: "/etc/resolv.conf"
-        dest: "{{ backup_dir }}/resolv.conf.bak"
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Backup /etc/sssd/sssd.conf
-      copy:
-        src: "/etc/sssd/sssd.conf"
-        dest: "{{ backup_dir }}/sssd.conf.bak"
-        owner: root
-        group: root
-        mode: '0644'
+resolv
+hosts
+krb5.conf
+others?
