@@ -1,0 +1,57 @@
+---
+- name: Join Linux servers to Windows domain
+  hosts: your_hosts_group
+  become: yes
+
+  vars:
+    domain: "example.com"       # Replace with your domain
+    domain_user: "admin_user"   # Replace with the domain user with permissions to join machines
+    domain_password: "password" # Replace with the domain user's password
+
+  tasks:
+    - name: Install required packages for domain join
+      yum:
+        name:
+          - sssd
+          - realmd
+          - adcli
+          - krb5-workstation
+        state: present
+
+    - name: Ensure that the realmd service is running
+      systemd:
+        name: realmd
+        state: started
+        enabled: yes
+
+    - name: Join the domain
+      command: >
+        realm join --user={{ domain_user }} {{ domain }}
+      args:
+        stdin: "{{ domain_password }}"
+      register: realm_join
+      ignore_errors: yes
+
+    - name: Check if domain join was successful
+      debug:
+        var: realm_join
+      failed_when: "'successfully enrolled' not in realm_join.stdout"
+
+    - name: Enable and start SSSD service
+      systemd:
+        name: sssd
+        state: started
+        enabled: yes
+
+    - name: Update /etc/sssd/sssd.conf
+      lineinfile:
+        path: /etc/sssd/sssd.conf
+        regexp: '^[#]*use_fully_qualified_names'
+        line: 'use_fully_qualified_names = False'
+        create: yes
+        backup: yes
+
+    - name: Restart SSSD service to apply changes
+      systemd:
+        name: sssd
+        state: restarted
