@@ -20,3 +20,5 @@
       no_log: true
       # Passwords are enecrypted when passed to client, but appear as plaintext in logs...
       # Do not disable this unless you are troubleshooting; preferably your passwords remain secret :)
+#This just literally adds the server to the domain, but does nothing else.
+#More tasks are ran in another playbook for configuring SSSD, KRB5, restarting SSSD, permitting realms, clearing SSS cache, and potentially rebooting the server
