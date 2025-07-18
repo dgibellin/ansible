@@ -1,57 +1,22 @@
 ---
-- name: Join Linux servers to Windows domain
-  hosts: your_hosts_group
+- name: Realm Join to Resource Domain
+  hosts: all
   become: yes
+  gather_facts: no
 
   vars:
-    domain: "example.com"       # Replace with your domain
-    domain_user: "admin_user"   # Replace with the domain user with permissions to join machines
-    domain_password: "password" # Replace with the domain user's password
+    resource_domain: "test.supersecret.mil
+    resource_domain_admin: "admingibellda"
+    # resource_domain_admin_password: See /etc/ansible/vault/admingibellda-secret.yml
+  vars_files:
+    - /etc/ansible/vault/admingibellda-secret.yml
 
   tasks:
-    - name: Install required packages for domain join
-      yum:
-        name:
-          - sssd
-          - realmd
-          - adcli
-          - krb5-workstation
-        state: present
-
-    - name: Ensure that the realmd service is running
-      systemd:
-        name: realmd
-        state: started
-        enabled: yes
-
-    - name: Join the domain
-      command: >
-        realm join --user={{ domain_user }} {{ domain }}
-      args:
-        stdin: "{{ domain_password }}"
-      register: realm_join
-      ignore_errors: yes
-
-    - name: Check if domain join was successful
-      debug:
-        var: realm_join
-      failed_when: "'successfully enrolled' not in realm_join.stdout"
-
-    - name: Enable and start SSSD service
-      systemd:
-        name: sssd
-        state: started
-        enabled: yes
-
-    - name: Update /etc/sssd/sssd.conf
-      lineinfile:
-        path: /etc/sssd/sssd.conf
-        regexp: '^[#]*use_fully_qualified_names'
-        line: 'use_fully_qualified_names = False'
-        create: yes
-        backup: yes
-
-    - name: Restart SSSD service to apply changes
-      systemd:
-        name: sssd
-        state: restarted
+    - name: Joining to Resource Domain
+      expect:
+        command: realm join {{ resource_domain }} -U {{ resource_domain_admin }}
+        responses:
+          Password for *: "{{ resource_domain_admin_password }}"
+      no_log: true
+      # Passwords are enecrypted when passed to client, but appear as plaintext in logs...
+      # Do not disable this unless you are troubleshooting; preferably your passwords remain secret :)
