@@ -1,15 +1,15 @@
 ---
-- name: Install and enable AutoFS
-  hosts: your_hosts_group
+- name: Install and Enable AutoFS
+  hosts: all
   become: yes
 
   tasks:
-    - name: Install AutoFS package
+    - name: Installing AutoFS Package
       yum:
         name: autofs
         state: present
 
-    - name: Ensure AutoFS service is enabled at boot
+    - name: Ensuring autofs.service is Enabled at Boot
       systemd:
         name: autofs
         enabled: yes
