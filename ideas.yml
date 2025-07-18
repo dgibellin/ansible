@@ -1,0 +1,13 @@
+Ideas for the future
+
+Playbook for deploying certificates
+Playbook for renewing certificates
+Playbook for checking storage (root, /opt, /var, /var/log, /tmp)
+Playbook for checking uptime
+Playbook for managing services (just one playbook and a --extra-vars to call out start/stop/restart/status)
+Playbook for chronyc sources 
+Playbook for checking locked out users via faillock or pam_tally2 (how do I target "all" here? Pull users from /home maybe and register those as variables for later tasks??
+Playbook for managing SELinux privleges on SELinux-enabled servers
+Playbook for parsing specific log errors
+Playbook for checking root logins and showing where they logged in from
+Playbook for CPU% (unreliable since Ansible spikes a servers CPU% and gives an unreliable result; maybe better with sar commands or just use Zabbix?)
